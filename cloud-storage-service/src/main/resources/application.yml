@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: cloud-storage-service
+
+  datasource:
+    url: ${SQL_URL:dbc:mysql://localhost:3306/storagedb}
+    username: ${SQL_USERNAME:myuser}
+    password: ${SQL_PASSWORD:mypassword}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    show-sql: true
+
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+server:
+  port: 3400
+  error:
+    include-message: always
+
+container-storage:
+  azure:
+    key: ${AZURE_CONNECTION}
+    
