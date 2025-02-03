@@ -1,0 +1,46 @@
+spring:
+  application:
+    name: adoption-service
+
+  rabbitmq:
+    host: ${RABBITMQ_HOST_PATH:localhost}
+    virtual-host: ${RABBITMQ_VHOST_PATH:/}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:password}
+
+  datasource:
+    url: ${ADOPTION_AUTH_DATASOURCE:jdbc:mysql://localhost:3306/authdb}
+    username: ${ADOPTION_AUTH_USERNAME:app_user}
+    password: ${ADOPTION_AUTH_PASSWORD:app_password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update # create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    show-sql: true
+
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+server:
+  port: 3820
+  error:
+    include-message: always
+
+cloud-storage-service:
+  base-url: ${CLOUD_STORAGE_PATH:http://localhost:2660}
+
+rabbitmq:
+  exchange:
+  routing-key: image-processor-task-queue
+  queue-name: image-processor-task-queue
+
+jwt:
+  secret: ${JWT_PRIVATE_SECRET:secret}
+  expiration: 86400000 # 24 hours
