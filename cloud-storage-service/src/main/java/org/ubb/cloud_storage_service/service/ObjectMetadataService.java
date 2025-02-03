@@ -84,12 +84,13 @@ public class ObjectMetadataService
         return content;
     }
 
+    @Transactional
     public void deleteObject(String userName, UUID objectId)
     {
         LOGGER.info("Deleting object, userName: {}, objectId: {}", userName, objectId);
         ObjectMetadata objectMetadata = getObjectOrThrow(userName, objectId);
         azureBlobStorageClient.removeFile(userName, objectMetadata.getContainer().getContainerId(), objectMetadata.getObjectName());
-        objectMetadataRepository.deleteById(objectId);
+        objectMetadataRepository.delete(objectMetadata);
         LOGGER.info("Deleted object, userName: {}, objectId: {}", userName, objectId);
     }
 

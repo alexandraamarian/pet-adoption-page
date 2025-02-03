@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/object-metadata") // More descriptive path
 public class ObjectMetadataController
@@ -83,8 +84,7 @@ public class ObjectMetadataController
     @GetMapping("/{userName}/{objectId}/content")
     public ResponseEntity<Resource> getObjectContent(
             @PathVariable String userName,
-            @PathVariable UUID objectId,
-            @RequestParam(value = "simple", defaultValue = "false") boolean isSimple)
+            @PathVariable UUID objectId)
     {
 
         ObjectMetadataResponse objectMetadata = objectMetadataService.getObjectMetadata(userName, objectId);

@@ -60,6 +60,7 @@ public class Converter
                 objectMetadata.getUserName(),
                 objectMetadata.getObjectName(),
                 objectMetadata.getMimeType(),
+                objectMetadata.getCreatedTime() == null ? "" : objectMetadata.getCreatedTime().toString(),
                 objectMetadata.getContainer().getContainerId()
         );
     }

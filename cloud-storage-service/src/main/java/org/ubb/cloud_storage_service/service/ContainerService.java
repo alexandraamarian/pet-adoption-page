@@ -6,11 +6,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 import org.ubb.cloud_storage_service.controller.api.ContainerRequest;
 import org.ubb.cloud_storage_service.controller.api.ContainerResponse;
 import org.ubb.cloud_storage_service.db.Container;
-import org.ubb.cloud_storage_service.exception.BadRequestException;
 import org.ubb.cloud_storage_service.exception.ObjectNotFoundException;
 import org.ubb.cloud_storage_service.repository.ContainerRepository;
 import org.ubb.cloud_storage_service.utils.Converter;
@@ -63,10 +61,6 @@ public class ContainerService
         LOGGER.info("Will delete container, userName: {}, containerId: {}", userName, containerId);
         Container existingContainer = containerRepository.findByUserNameAndContainerId(userName, containerId)
                 .orElseThrow(() -> new ObjectNotFoundException("Container not found"));
-        if (!CollectionUtils.isEmpty(existingContainer.getObjectMetadataList()))
-        {
-            throw new BadRequestException("Cannot delete container, it is not empty");
-        }
         containerRepository.delete(existingContainer);
         LOGGER.info("Deleted container, userName: {}, containerId: {}", userName, containerId);
     }
