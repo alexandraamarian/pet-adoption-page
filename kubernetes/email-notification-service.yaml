@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: email-notification-service
+  namespace: pet-adoption
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: email-notification-service
+  template:
+    metadata:
+      labels:
+        app: email-notification-service
+    spec:
+      containers:
+        - name: email-notification-service
+          image: petadoptionaleacr.azurecr.io/email-notification-service:latest
+          ports:
+            - containerPort: 3520
+          envFrom:
+            - configMapRef:
+                name: app-config
+            - secretRef:
+                name: app-secrets
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: email-notification-service
+  namespace: pet-adoption
+spec:
+  selector:
+    app: email-notification-service
+  ports:
+    - protocol: TCP
+      port: 3520
+      targetPort: 3520
+  type: ClusterIP
