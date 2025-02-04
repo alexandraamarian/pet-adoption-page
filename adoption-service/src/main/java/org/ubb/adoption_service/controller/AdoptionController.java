@@ -13,7 +13,9 @@ import org.ubb.adoption_service.api.AdoptionInfoResponse;
 import org.ubb.adoption_service.api.AdoptionPreviewInfo;
 import org.ubb.adoption_service.api.AdoptionSubscriptionRequest;
 import org.ubb.adoption_service.api.AdoptionSubscriptionResponse;
+import org.ubb.adoption_service.exception.UnauthorizedException;
 import org.ubb.adoption_service.service.AdoptionService;
+import org.ubb.adoption_service.service.security.AuthenticationVerifier;
 
 import java.util.UUID;
 
@@ -22,10 +24,12 @@ import java.util.UUID;
 @RequestMapping("/api/adoptions")
 public class AdoptionController
 {
+    private final AuthenticationVerifier authenticationVerifier;
     private final AdoptionService adoptionService;
 
-    public AdoptionController(AdoptionService adoptionService)
+    public AdoptionController(AuthenticationVerifier authenticationVerifier, AdoptionService adoptionService)
     {
+        this.authenticationVerifier = authenticationVerifier;
         this.adoptionService = adoptionService;
     }
 
@@ -37,6 +41,7 @@ public class AdoptionController
                                                                @RequestParam("detailedInformation") String detailedInformation,
                                                                @RequestParam("image") MultipartFile image)
     {
+        authCheck(userName);
         var response = adoptionService.createAdoptionPost(userName, petName, petAge, petType, detailedInformation, image);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -53,6 +58,7 @@ public class AdoptionController
                                                                             @RequestParam("posterUserName") String posterUserName,
                                                                             @RequestParam("subscriberUserName") String subscriberUserName)
     {
+        authCheck(subscriberUserName);
         var requestData = new AdoptionSubscriptionRequest(adoptionId, posterUserName, subscriberUserName);
         var response = adoptionService.subscribeToAdoption(requestData);
         return ResponseEntity.ok(response);
@@ -61,8 +67,19 @@ public class AdoptionController
     @DeleteMapping("/{adoptionId}")
     public ResponseEntity<Void> deleteAdoptionPost(@PathVariable("adoptionId") UUID adoptionId, @RequestParam("userName") String userName)
     {
+        authCheck(userName);
         adoptionService.deleteAdoptionPost(userName, adoptionId);
         return ResponseEntity.noContent().build();
+    }
+
+    private void authCheck(String userName)
+    {
+        String loggedInUser = authenticationVerifier.getAuthenticatedUser();
+
+        if (!loggedInUser.equals(userName))
+        {
+            throw new UnauthorizedException("Unauthorized to perform this operation on this user");
+        }
     }
 }
 
