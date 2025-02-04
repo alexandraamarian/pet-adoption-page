@@ -1,8 +1,8 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: pet-adoption-ingress
-  namespace: pet-adoption
+  name: adoption-services-ingress
+  namespace: adoption-services
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:

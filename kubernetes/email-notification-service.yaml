@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: email-notification-service
-  namespace: pet-adoption
+  namespace: adoption-services
 spec:
   replicas: 1
   selector:
@@ -28,7 +28,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: email-notification-service
-  namespace: pet-adoption
+  namespace: adoption-services
 spec:
   selector:
     app: email-notification-service

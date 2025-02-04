@@ -4,3 +4,4 @@ metadata:
   name: app-config
 data:
   CLOUD_STORAGE_PATH: "http://cloud-storage-service:3400"
+  RABBITMQ_PORT: "5672"
