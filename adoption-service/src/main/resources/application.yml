@@ -38,8 +38,8 @@ cloud-storage-service:
 
 rabbitmq:
   exchange:
-  routing-key: image-processor-task-queue
-  queue-name: image-processor-task-queue
+  routing-key: adoptionSubscriptionQueue
+  queue-name: adoptionSubscriptionQueue
 
 jwt:
   secret: ${JWT_PRIVATE_SECRET:secret}
