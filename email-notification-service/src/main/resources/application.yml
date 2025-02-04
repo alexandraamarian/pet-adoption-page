@@ -1,3 +1,43 @@
 spring:
   application:
     name: email-notification-service
+
+  mail:
+    host: smtp.zoho.eu
+    port: 465
+    username: ${EMAIL_ADDRESS:email@zoho.eu}
+    password: ${EMAIL_PASSWORD:password}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            enable: true
+
+  rabbitmq:
+    host: ${RABBITMQ_HOST_PATH:localhost}
+    virtual-host: ${RABBITMQ_VHOST_PATH:/}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:password}
+    listener:
+      simple:
+        concurrency: 1
+        max-concurrency: 5
+    template:
+      retry:
+        enabled: true
+        initial-interval: 1000ms
+        multiplier: 2
+        max-attempts: 3
+
+cloud-storage-service:
+  base-url: ${CLOUD_STORAGE_PATH:http://localhost:2660}
+
+rabbitmq:
+  exchange:
+  routing-key: adoptionSubscriptionQueue
+  queue-name: adoptionSubscriptionQueue
+
+server:
+  port: 3520
